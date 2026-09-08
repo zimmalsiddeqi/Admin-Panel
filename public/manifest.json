@@ -1,0 +1,16 @@
+{
+  "name": "Aliwayz",
+  "short_name": "Aliwayz",
+  "description": "Buy & sell cars, property, and daily products locally",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1117",
+  "theme_color": "#5B6EF5",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192 512x512 any",
+      "type": "image/png"
+    }
+  ]
+}

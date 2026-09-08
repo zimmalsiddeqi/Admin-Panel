@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*":           ["src/*"],
+      "@admin/*":      ["src/*"],
+      "@shared/*":     ["../shared/src/*"],
+      "@api/*":        ["../shared/src/api/*"],
+      "@components/*": ["../shared/src/components/*"],
+      "@hooks/*":      ["../shared/src/hooks/*"],
+      "@lib/*":        ["../shared/src/lib/*"],
+      "@store/*":      ["../shared/src/store/*"],
+      "@styles/*":     ["../shared/src/styles/*"],
+      "@utils/*":      ["../shared/src/utils/*"],
+      "@types/*":      ["../shared/src/types/*"]
+    }
+  },
+  "include": ["src/**/*", "../shared/src/**/*"],
+  "exclude": ["node_modules"]
+}
+
