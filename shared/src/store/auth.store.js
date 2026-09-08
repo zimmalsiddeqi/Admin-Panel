@@ -27,12 +27,14 @@ const useAuthStore = create(
         isLoading:       false,
         isInitialized:   true,
       });
-      // Fetch user favorites upon successful authentication
-      try {
-        const { useFavoritesStore } = require('./favorites.store');
-        useFavoritesStore.getState().fetchFavorites();
-      } catch (e) {
-        console.error('Failed to require favorites store:', e);
+      // Fetch user favorites upon successful authentication (non-admin)
+      if (user?.role !== 'admin') {
+        try {
+          const { useFavoritesStore } = require('./favorites.store');
+          useFavoritesStore.getState().fetchFavorites();
+        } catch (e) {
+          // Ignore in admin context
+        }
       }
     },
 

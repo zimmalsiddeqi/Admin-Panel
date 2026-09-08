@@ -9,7 +9,7 @@ export default function AdminGuard({ children }) {
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   if (user?.role !== 'admin') {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
