@@ -11,6 +11,7 @@ const AdminBroadcastPage     = lazy(() => import('../pages/AdminBroadcastPage'))
 const AdminFeedbackPage      = lazy(() => import('../pages/AdminFeedbackPage'));
 const AdminVerificationsPage = lazy(() => import('../pages/AdminVerificationsPage'));
 const AdminCategoriesPage    = lazy(() => import('../pages/AdminCategoriesPage'));
+const AdminLoginPage         = lazy(() => import('../pages/AdminLoginPage'));
 
 export {
   AdminDashboardPage,
@@ -23,5 +24,6 @@ export {
   AdminFeedbackPage,
   AdminVerificationsPage,
   AdminCategoriesPage,
+  AdminLoginPage,
 };
 

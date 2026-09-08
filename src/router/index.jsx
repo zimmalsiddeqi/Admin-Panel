@@ -13,10 +13,15 @@ import {
   AdminFeedbackPage,
   AdminVerificationsPage,
   AdminCategoriesPage,
+  AdminLoginPage,
 } from './routes';
 
 const router = createBrowserRouter(
   [
+    {
+      path: '/login',
+      element: <AdminLoginPage />,
+    },
     {
       element: (
         <AdminGuard>
