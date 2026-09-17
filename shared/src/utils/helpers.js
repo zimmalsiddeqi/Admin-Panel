@@ -62,8 +62,12 @@ export function getUnreadCount(conversation, userId) {
  */
 export function getOtherParticipant(conversation, userId) {
   if (!conversation || !userId) return null;
-  if (conversation.buyer?.id === userId)  return conversation.seller;
-  if (conversation.seller?.id === userId) return conversation.buyer;
+  if (conversation.buyer?.id === userId || conversation.buyer_id === userId) {
+    return conversation.seller || (conversation.seller_id ? { id: conversation.seller_id } : null);
+  }
+  if (conversation.seller?.id === userId || conversation.seller_id === userId) {
+    return conversation.buyer || (conversation.buyer_id ? { id: conversation.buyer_id } : null);
+  }
   return null;
 }
 
@@ -131,12 +135,33 @@ export function getBadgeDisplay(code) {
  * Validate image file before upload
  */
 export function validateImageFile(file) {
-  const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
-  const MAX_MB  = 10;
+  if (!file) return { valid: false, error: 'No file selected' };
+  const type = (file.type || '').toLowerCase();
+  const ext = (file.name || '').split('.').pop()?.toLowerCase();
+  const allowedTypes = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+    'image/pjpeg',
+    'image/x-png',
+    'image/gif',
+    'image/bmp',
+    'image/heic',
+    'image/heif',
+    'image/avif',
+  ];
+  const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'heic', 'heif', 'avif'];
 
-  if (!ALLOWED.includes(file.type)) {
-    return { valid: false, error: 'Only JPEG, PNG, and WebP images allowed' };
+  const isValidType =
+    type.startsWith('image/') ||
+    allowedTypes.includes(type) ||
+    (ext && allowedExts.includes(ext));
+
+  if (!isValidType) {
+    return { valid: false, error: 'Only image files (JPEG, PNG, WebP) are allowed' };
   }
+  const MAX_MB = 15;
   if (file.size > MAX_MB * 1024 * 1024) {
     return { valid: false, error: `Image must be under ${MAX_MB}MB` };
   }
@@ -216,3 +241,41 @@ export function getProductListingLocation({ store, userLat, userLng }) {
     isApproximate: false,
   };
 }
+
+/**
+ * Extract QR verification token from raw string, JSON payload, or URL
+ */
+export function extractQRToken(raw = '') {
+  if (!raw) return '';
+  let text = String(raw).trim();
+  // Strip surrounding quotes
+  text = text.replace(/^["']|["']$/g, '');
+
+  // Check if it's a JSON string containing a token
+  if (text.startsWith('{') && text.endsWith('}')) {
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed.token) return String(parsed.token).trim();
+    } catch {}
+  }
+
+  // Check if it's a URL or contains token= parameter
+  if (text.includes('token=')) {
+    try {
+      const url = new URL(text.startsWith('http') ? text : `https://${text}`);
+      const param = url.searchParams.get('token');
+      if (param) return decodeURIComponent(param).trim();
+    } catch {
+      const match = text.match(/[?&]token=([^&#]+)/);
+      if (match) return decodeURIComponent(match[1]).trim();
+    }
+  }
+
+  if (text.includes('%')) {
+    try {
+      text = decodeURIComponent(text);
+    } catch {}
+  }
+
+  return text.trim();
+}

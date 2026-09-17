@@ -87,12 +87,8 @@ export default function Navbar() {
       : '/login';
     items.push({ to: sellLink, icon: PlusCircle, label: 'Sell', highlight: true });
 
-    // 4. Notifications (Alerts)
-    if (isAuthenticated) {
-      items.push({ to: '/notifications', icon: Bell, label: 'Alerts', badge: unreadCount });
-    } else {
-      items.push({ to: '/login', icon: Bell, label: 'Alerts' });
-    }
+    // 4. Wanted
+    items.push({ to: '/wanted', icon: Compass, label: 'Wanted' });
 
     // 5. Profile or Login
     if (isAuthenticated) {
@@ -111,6 +107,9 @@ export default function Navbar() {
   // ── Desktop nav items ──────────────────────────────────
   const getDesktopNavItems = () => {
     const items = [];
+
+    // Wanted Hub
+    items.push({ to: '/wanted', icon: Compass, label: 'Wanted' });
 
     // Sell — NOT for admin
     if (isAuthenticated && role !== 'admin') {
@@ -166,18 +165,6 @@ export default function Navbar() {
         });
       }
 
-      // Browse
-      sections.push({
-        title: 'Browse',
-        items: [
-          { to: '/essentials', icon: Compass, label: '🛒 Marketplace' },
-          { to: '/vehicles', icon: Compass, label: '🚗 Automotive' },
-          { to: '/real-estate', icon: Compass, label: '🏠 Real Estate' },
-          { to: '/marketplace', icon: Compass, label: 'All Listings' },
-          { to: '/faq', icon: HelpCircle, label: 'FAQ & Help' },
-        ],
-      });
-
       // Admin
       if (isAdmin(role)) {
         sections.push({
@@ -188,6 +175,18 @@ export default function Navbar() {
         });
       }
     }
+
+    // Browse (Always available for guests, users, and search crawlers)
+    sections.push({
+      title: 'Browse',
+      items: [
+        { to: '/essentials', icon: Compass, label: '🛒 Marketplace' },
+        { to: '/vehicles', icon: Compass, label: '🚗 Automotive' },
+        { to: '/real-estate', icon: Compass, label: '🏠 Real Estate' },
+        { to: '/marketplace', icon: Compass, label: 'All Listings' },
+        { to: '/faq', icon: HelpCircle, label: 'FAQ & Help' },
+      ],
+    });
 
     return sections;
   };
@@ -211,6 +210,18 @@ export default function Navbar() {
   const desktopNavItems = getDesktopNavItems();
   const menuSections = getMobileMenuSections();
   const desktopDropdownSections = getDesktopDropdownSections();
+
+  // Helper to accurately match active routes including sub-paths
+  const isRouteActive = (to) => {
+    if (to === '/') return location.pathname === '/';
+    if (to === '/wanted') return location.pathname.startsWith('/wanted');
+    if (to === '/sell/create') return location.pathname.startsWith('/sell');
+    if (to === '/inbox') return location.pathname.startsWith('/inbox');
+    if (to === '/profile') return location.pathname.startsWith('/profile');
+    if (to === '/notifications') return location.pathname.startsWith('/notifications');
+    if (to === '/admin') return location.pathname.startsWith('/admin');
+    return location.pathname === to || location.pathname.startsWith(`${to}/`);
+  };
 
   return (
     <>
@@ -241,32 +252,35 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link to="/" className="flex flex-shrink-0 items-center gap-2">
-              <img src="/logo.png" alt="Aliwayz Logo" className="h-6 sm:h-8 w-auto object-contain" />
+              <img src="/navbar-logo.png" alt="Aliwayz Logo" className="h-9 sm:h-10 w-auto object-contain transition-all" />
             </Link>
           </div>
 
           {/* ── Center: Desktop Nav ───────────────────────── */}
           <nav className="hidden items-center gap-1 md:flex">
-            {desktopNavItems.map(({ to, icon: Icon, label, badge }) => (
-              <Link
-                key={`desktop-${to}`}
-                to={to}
-                className={cn(
-                  'relative flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200',
-                  location.pathname === to
-                    ? 'text-[var(--color-brand)]'
-                    : 'text-[var(--color-text-secondary)] hover:bg-[var(--glass-bg-strong)] hover:text-[var(--color-text-primary)]'
-                )}
-              >
-                <Icon size={18} />
-                <span className="hidden lg:inline">{label}</span>
-                {badge > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-accent-red px-1 text-[10px] font-bold text-white">
-                    {badge > 99 ? '99+' : badge}
-                  </span>
-                )}
-              </Link>
-            ))}
+            {desktopNavItems.map(({ to, icon: Icon, label, badge }) => {
+              const isActive = isRouteActive(to);
+              return (
+                <Link
+                  key={`desktop-${to}`}
+                  to={to}
+                  className={cn(
+                    'relative flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200',
+                    isActive
+                      ? 'text-[var(--color-brand)] bg-[var(--color-brand)]/10 font-bold'
+                      : 'text-[var(--color-text-secondary)] hover:bg-[var(--glass-bg-strong)] hover:text-[var(--color-text-primary)]'
+                  )}
+                >
+                  <Icon size={18} />
+                  <span className="hidden lg:inline">{label}</span>
+                  {badge > 0 && (
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-accent-red px-1 text-[10px] font-bold text-white">
+                      {badge > 99 ? '99+' : badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* ── Right: Actions ────────────────────────────── */}
@@ -465,7 +479,7 @@ export default function Navbar() {
                 style={{ borderBottom: '1px solid var(--color-border)' }}
               >
                 <div className="flex items-center gap-2.5">
-                  <img src="/logo.png" alt="Aliwayz Logo" className="h-6 w-auto object-contain" />
+                  <img src="/navbar-logo.png" alt="Aliwayz Logo" className="h-6 w-auto object-contain" />
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
@@ -619,7 +633,7 @@ export default function Navbar() {
       >
         <div className="flex h-14 items-center justify-around px-1">
           {bottomNavItems.map(({ to, icon: Icon, label, badge, highlight }) => {
-            const isActive = location.pathname === to;
+            const isActive = isRouteActive(to);
 
             return (
               <Link

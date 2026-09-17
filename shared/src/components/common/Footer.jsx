@@ -78,16 +78,17 @@ export default function Footer() {
 
   const COMPANY_LINKS = [
     { label: 'About Us', to: '/legal/about' },
-    { label: 'FAQ', to: '/faq' },
+    { label: 'Legal Center', to: '/legal' },
     { label: 'Privacy Policy', to: '/legal/privacy-policy' },
     { label: 'Terms of Use', to: '/legal/terms' },
-    { label: 'Contact', to: '#', onClick: () => setShowFeedback(true) },
+    { label: 'Contact Us', to: '/legal/contact' },
   ];
 
   const SUPPORT_LINKS = [
-    { label: 'Help Center', to: '/faq' },
-    { label: 'FAQ', to: '/faq' },
-    { label: 'Safety Tips', to: '/legal/safety-guidelines' },
+    { label: 'Help Center & FAQ', to: '/faq' },
+    { label: 'Safety Guidelines', to: '/legal/safety' },
+    { label: 'Seller Policy', to: '/legal/seller-policy' },
+    { label: 'Buyer Policy', to: '/legal/buyer-policy' },
     {
       label: 'Report an Issue',
       to: '#',
@@ -165,7 +166,7 @@ export default function Footer() {
               {/* Brand — always visible */}
               <div className="mb-6 flex items-center gap-2.5">
                 <Link to="/" className="flex flex-shrink-0 items-center gap-2">
-                  <img src="/logo.png" alt="Aliwayz Logo" className="h-6 w-auto object-contain" />
+                  <img src="/navbar-logo.png" alt="Aliwayz Logo" className="h-6 w-auto object-contain" />
                 </Link>
               </div>
 
@@ -217,6 +218,7 @@ export default function Footer() {
                               <Link
                                 key={link.label}
                                 to={link.to}
+                                onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                                 className="block py-1 text-sm transition-colors hover:underline"
                                 style={{ color: 'var(--color-text-secondary)' }}
                               >
@@ -250,8 +252,8 @@ export default function Footer() {
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 sm:gap-6">
               {/* Brand column */}
               <div className="col-span-2 space-y-4 sm:col-span-1">
-                <Link to="/" className="flex items-center gap-2.5">
-                  <img src="/logo.png" alt="Aliwayz Logo" className="h-7 w-auto object-contain" />
+                <Link to="/" onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })} className="flex items-center gap-2.5">
+                  <img src="/navbar-logo.png" alt="Aliwayz Logo" className="h-7 w-auto object-contain" />
                 </Link>
                 <p
                   className="max-w-[200px] text-xs leading-relaxed"
@@ -290,6 +292,7 @@ export default function Footer() {
                     <li key={link.label}>
                       <Link
                         to={link.to}
+                        onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                         className="text-sm transition-colors hover:underline"
                         style={{ color: 'var(--color-text-secondary)' }}
                       >
@@ -322,6 +325,7 @@ export default function Footer() {
                       ) : (
                         <Link
                           to={link.to}
+                          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                           className="text-sm transition-colors hover:underline"
                           style={{ color: 'var(--color-text-secondary)' }}
                         >
@@ -355,6 +359,7 @@ export default function Footer() {
                       ) : (
                         <Link
                           to={link.to}
+                          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                           className="text-sm transition-colors hover:underline"
                           style={{ color: 'var(--color-text-secondary)' }}
                         >
@@ -375,7 +380,7 @@ export default function Footer() {
               className="flex items-center gap-1 text-xs"
               style={{ color: 'var(--color-text-muted)' }}
             >
-              © {currentYear} Aliwayz. Made with
+              © {currentYear} Aliwayz LLC. All rights reserved. Made with
               <Heart size={10} fill="var(--color-error)" style={{ color: 'var(--color-error)' }} />
               for local communities.
             </p>
