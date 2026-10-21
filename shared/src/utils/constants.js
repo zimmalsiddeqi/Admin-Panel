@@ -4,9 +4,31 @@
 
 export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Aliwayz';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://aliwayz-backend-production-1899.up.railway.app/api/v1';
+const getApiBaseUrl = () => {
+  let url = import.meta.env.VITE_API_BASE_URL || 'https://aliwayz-backend-production-1899.up.railway.app/api/v1';
+  if (typeof url === 'string') {
+    url = url.trim();
+    if (url.includes('aliwayz-backend-production.up.railway.app') && !url.includes('aliwayz-backend-production-1899')) {
+      url = url.replace('aliwayz-backend-production.up.railway.app', 'aliwayz-backend-production-1899.up.railway.app');
+    }
+  }
+  return url;
+};
 
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://aliwayz-backend-production-1899.up.railway.app';
+export const API_BASE_URL = getApiBaseUrl();
+
+const getSocketUrl = () => {
+  let url = import.meta.env.VITE_SOCKET_URL || 'https://aliwayz-backend-production-1899.up.railway.app';
+  if (typeof url === 'string') {
+    url = url.trim();
+    if (url.includes('aliwayz-backend-production.up.railway.app') && !url.includes('aliwayz-backend-production-1899')) {
+      url = url.replace('aliwayz-backend-production.up.railway.app', 'aliwayz-backend-production-1899.up.railway.app');
+    }
+  }
+  return url;
+};
+
+export const SOCKET_URL = getSocketUrl();
 
 // ── User Roles ─────────────────────────────────────────────────
 export const ROLES = {

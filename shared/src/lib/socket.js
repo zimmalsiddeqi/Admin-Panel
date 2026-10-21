@@ -1,6 +1,17 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://aliwayz-backend-production-1899.up.railway.app';
+const getSocketUrl = () => {
+  let url = import.meta.env.VITE_SOCKET_URL || 'https://aliwayz-backend-production-1899.up.railway.app';
+  if (typeof url === 'string') {
+    url = url.trim();
+    if (url.includes('aliwayz-backend-production.up.railway.app') && !url.includes('aliwayz-backend-production-1899')) {
+      url = url.replace('aliwayz-backend-production.up.railway.app', 'aliwayz-backend-production-1899.up.railway.app');
+    }
+  }
+  return url;
+};
+
+const SOCKET_URL = getSocketUrl();
 
 let socketInstance = null;
 let connectionAttempts = 0;

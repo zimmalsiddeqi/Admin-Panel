@@ -1,7 +1,18 @@
 import axios from 'axios';
 import toast from '@lib/toast';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://aliwayz-backend-production-1899.up.railway.app/api/v1';
+const getApiBaseUrl = () => {
+  let url = import.meta.env.VITE_API_BASE_URL || 'https://aliwayz-backend-production-1899.up.railway.app/api/v1';
+  if (typeof url === 'string') {
+    url = url.trim();
+    if (url.includes('aliwayz-backend-production.up.railway.app') && !url.includes('aliwayz-backend-production-1899')) {
+      url = url.replace('aliwayz-backend-production.up.railway.app', 'aliwayz-backend-production-1899.up.railway.app');
+    }
+  }
+  return url;
+};
+
+const BASE_URL = getApiBaseUrl();
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
